@@ -101,15 +101,33 @@ export class MenuPage {
     this.platform.ready().then(() => {
       if (this.platform.is('cordova')) {
         this.oneSignal.startInit(App.OneSignalAppID, App.GCMServerApiKey);
-        this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
-
-        this.oneSignal.handleNotificationReceived().subscribe((x) => {
-          // do something when notification is received
-          console.log(x);
-        });
+        this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);       
 
         this.oneSignal.handleNotificationOpened().subscribe(() => {
-          // do something when a notification is opened
+          
+          
+          let additionalData = jsonData.notification.payload.additionalData;
+              if (additionalData.welcome) {
+
+
+              }
+              else {
+
+                var idNovidad: number;
+                var tipo: string;
+
+                idNovidad = additionalData.id ? additionalData.id : 0;
+                tipo = additionalData.tipo ? additionalData.tipo : '';
+
+                if (tipo == 'post' && idNovidad > 0) {
+                setTimeout(() => {
+                  this.nav.push('DetailPage', { idNovidad: idNovidad });
+                  }, 1000);
+                }
+
+              }
+
+          
         });
 
         this.oneSignal.endInit();
